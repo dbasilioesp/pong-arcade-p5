@@ -1,0 +1,19 @@
+{
+  "name": "pong",
+  "version": "1.0.0",
+  "description": "Game desenvolvido com P5.js referênciando o clássico jogo Pong.",
+  "main": "index.js",
+  "dependencies": {
+    "live-server": "^1.2.2"
+  },
+  "devDependencies": {
+    "bestzip": "^2.2.1"
+  },
+  "scripts": {
+    "start": "live-server --ignore=node_modules --open=src",
+    "zip": "cd src && bestzip ../bundle.zip *"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
