@@ -5,12 +5,13 @@ function sketch(s) {
     width: 900,
     height: 400,
     gameOver: false,
+    loading: true,
+    started: false,
     win: false,
     pause: false,
   }
   GAME.halfWidth = GAME.width / 2
   GAME.halfHeight = GAME.height / 2
-  let gameLoaded = false;
   let canvas;
 
   // Images
@@ -36,7 +37,7 @@ function sketch(s) {
     y: GAME.halfHeight - 30,
     width: 10,
     height: 60,
-    speed: 3.2,
+    speed: 5.2,
     points: 0
   };
 
@@ -69,9 +70,11 @@ function sketch(s) {
   }
 
   s.draw = () => {
-    isLoading()
-
-    if (gameLoaded) {
+    if (canvas && GAME.loading) {
+      isLoading()
+      showLoading()
+    }
+    else {
       s.background('black')
       s.image(ballImage, ball.x, ball.y, ball.width, ball.height)
       s.image(paddleImage, player.x, player.y, player.width, player.height)
@@ -79,25 +82,30 @@ function sketch(s) {
 
       showPoints()
 
-      if (GAME.pause === false) {
-        collideBallWall()
-        collideBallPlayer()
-        collideBallRival()
-        moveBall()
-        movePlayer()
-        moveRival()
+      if (GAME.started) {
+        if (!GAME.pause) {
+          collideBallWall()
+          collideBallPlayer()
+          collideBallRival()
+          moveBall()
+          movePlayer()
+          moveRival()
+        }
+      } else {
+        showClickToStart()
       }
+    }
+  }
 
-    } else {
-      if (canvas) {
-        showLoading()
-      }
+  s.mouseClicked = () => {
+    if (!GAME.loading) {
+      GAME.started = !GAME.started;
     }
   }
 
   function isLoading() {
     if (ballImage && paddleImage && hitSound) {
-      gameLoaded = true;
+      GAME.loading = false;
     }
   }
 
@@ -106,6 +114,13 @@ function sketch(s) {
     s.fill('white')
     s.textAlign('center')
     s.text('Loading', GAME.halfWidth, GAME.halfHeight)
+  }
+
+  function showClickToStart() {
+    s.textSize(20)
+    s.fill('white')
+    s.textAlign('center')
+    s.text('Click para começar', GAME.halfWidth, GAME.halfHeight)
   }
 
   function showPoints() {
